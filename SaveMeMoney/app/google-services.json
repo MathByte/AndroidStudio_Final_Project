@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "495604572100",
+    "project_id": "savememoney-db584",
+    "storage_bucket": "savememoney-db584.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495604572100:android:2b968d2d36d03e57540e91",
+        "android_client_info": {
+          "package_name": "com.kh_kerbabian.savememoney"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495604572100-7afsa8i8ut77bs3h3lpgmtsml8bvupsu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7WNFSFMdgCi_ZaXem_mOH2yp-SuTHW8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "495604572100-7afsa8i8ut77bs3h3lpgmtsml8bvupsu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
