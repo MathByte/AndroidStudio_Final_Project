@@ -1,12 +1,16 @@
 package com.kh_kerbabian.savememoney.ui.dashboard;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kh_kerbabian.savememoney.R;
@@ -37,15 +41,13 @@ public class RowItemsAdapter extends RecyclerView.Adapter<RowItemsAdapter.ViewHo
     }
 
 
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        super.onViewRecycled(holder);
 
+    }
 
-
-
-
-
-
-
-
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MoneyDataModel mdModle = rowModelArraylist.get(position);
@@ -53,21 +55,23 @@ public class RowItemsAdapter extends RecyclerView.Adapter<RowItemsAdapter.ViewHo
         holder.categoryText.setText(mdModle.getCategory());
         holder.ammountText.setText(String.valueOf(mdModle.getAmmount()));
         holder.dateText.setText(mdModle.getDate());
+        holder.typeText.setText(mdModle.getType());
+        if(mdModle.getType().equals("Expenses"))
+            holder.consLayout.setBackgroundColor(R.color.light_red_shade_1);
 
-
-        //setAnimation(holder.itemView, position);
+        setAnimation(holder.itemView, position);
     }
 
-/*
+
     private void setAnimation(View itemview, int possition){
         if(possition > lastPoss){
-            Animation animation = AnimationUtils.loadAnimation(req, androidx.navigation.ui.R.anim.nav_default_pop_exit_anim);
+            Animation animation = AnimationUtils.loadAnimation(itemview.getContext(), R.anim.anim_r_to_l);
             itemview.setAnimation(animation);
             lastPoss = possition;
         }
     }
 
-*/
+
 
 
 
@@ -85,12 +89,17 @@ public class RowItemsAdapter extends RecyclerView.Adapter<RowItemsAdapter.ViewHo
         private TextView categoryText;
         private TextView accountText;
         private TextView ammountText;
+        private TextView typeText;
+        private ConstraintLayout consLayout;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             dateText  = itemView.findViewById(R.id.dateText);
             categoryText = itemView.findViewById(R.id.categoryText);
             accountText = itemView.findViewById(R.id.accountText);
             ammountText = itemView.findViewById(R.id.ammountText);
+            typeText = itemView.findViewById(R.id.typeText);
+            consLayout = itemView.findViewById(R.id.cardHolderid);
         }
         @Override
         public void onClick(View view) {

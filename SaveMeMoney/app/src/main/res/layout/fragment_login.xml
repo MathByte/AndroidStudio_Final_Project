@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Email"
+                android:text="k@k.com"
                 android:inputType="textPersonName"
                 android:minHeight="48dp" />
 
@@ -46,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Password"
+                android:text="123123"
                 android:inputType="textPassword"
                 android:minHeight="48dp" />
 

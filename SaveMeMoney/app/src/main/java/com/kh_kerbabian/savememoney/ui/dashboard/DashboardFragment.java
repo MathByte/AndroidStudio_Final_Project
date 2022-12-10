@@ -39,7 +39,7 @@ public class DashboardFragment extends Fragment{
     private Calendar currentDate;
     private SimpleDateFormat formateInsance;
     private ArrayList<MoneyDataModel> MylistData ;
-    private RowItemsAdapter ReadItemAdapter;
+    private RowItemsAdapter rowItemAdapter;
 
 
     private FirebaseAuth mAuth;
@@ -60,64 +60,6 @@ public class DashboardFragment extends Fragment{
 
 
     }
-
-
-    private void getAllTransactions() {
-        MylistData.clear();
-
-        if (mAuth.getCurrentUser() != null) {
-            String ref = mAuth.getCurrentUser().getUid().toString();
-            databaseRef = database.getReference(ref);
-
-            databaseRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                    Log.d("Keys", snapshot.getValue().toString());
-                    MoneyDataModel ddd = snapshot.getValue(MoneyDataModel.class);
-                   // MylistData.add(snapshot.getValue(MoneyDataModel.class));//(MoneyDataModel.class));
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        Log.d("childN", child.getKey().toString());
-                        Log.d("childValue", child.getValue().toString());
-
-                        //MoneyDataModel mdm = new MoneyDataModel();
-                        //mdm.setAccount(snapshot.getKey().toString());
-                       // mdm.setDate(snapshot.child("/").toString());
-
-
-                    }
-                    // MylistData.add();//(MoneyDataModel.class));
-                   // ReadItemAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    //ReadItemAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                    //ReadItemAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                   // ReadItemAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-        else
-        {
-            Toast.makeText(requireContext(), "Please Sing in!!", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -148,16 +90,15 @@ public class DashboardFragment extends Fragment{
         });
 
 
-        getAllTransactions();
 
 
         RecyclerView recyclerView = (RecyclerView) binding.RVmoneyiId;
-        RowItemsAdapter adapter = new RowItemsAdapter( requireContext(),MylistData);
+        rowItemAdapter = new RowItemsAdapter( requireContext(),MylistData);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setAdapter(rowItemAdapter);
 
-        recyclerView.setAdapter(adapter);
-
+        getAllTransactions();
 
 
         return root;
@@ -170,6 +111,67 @@ public class DashboardFragment extends Fragment{
         super.onDestroyView();
         binding = null;
     }
+
+
+
+
+
+
+
+
+
+
+    private void getAllTransactions() {
+        MylistData.clear();
+
+        if (mAuth.getCurrentUser() != null) {
+            String ref = mAuth.getCurrentUser().getUid().toString();
+            databaseRef = database.getReference(ref);
+
+            databaseRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    Log.d("snapshotKeys", snapshot.getKey().toString());
+                    Log.d("snapshotValue", snapshot.getValue().toString());
+
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        MylistData.add(child.getValue(MoneyDataModel.class));
+                        Log.d("childKEY", child.getKey().toString());
+                        Log.d("childValue", child.getValue().toString());
+                    }
+                    rowItemAdapter.notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    //ReadItemAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                    //ReadItemAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    // ReadItemAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        else
+        {
+            Toast.makeText(requireContext(), "Please Sing in!!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
 
 }

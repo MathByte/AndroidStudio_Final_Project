@@ -14,7 +14,7 @@ public class MoneyDataModel implements Parcelable {
 
     }
 
-    public MoneyDataModel(String TyPE, String category, String account, String ammount, String datee) {
+    public MoneyDataModel( String category, String account, String ammount, String datee, String TyPE) {
         this.category = category;
         this.account = account;
         this.ammount = Double.valueOf(ammount);
