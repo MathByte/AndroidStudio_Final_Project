@@ -5,7 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +43,8 @@ public class DashboardFragment extends Fragment{
     private SimpleDateFormat formateInsance;
     private ArrayList<MoneyDataModel> MylistData ;
     private RowItemsAdapter rowItemAdapter;
-
+    private Spinner spinnerdates;
+    private String selectedDateRange;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
@@ -51,8 +55,12 @@ public class DashboardFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         currentDate = Calendar.getInstance();
+
         formateInsance= new SimpleDateFormat("MMMM, YYYY");
+        selectedDateRange = "Monthly";
+
         MylistData = new ArrayList<MoneyDataModel>();
 
         database =  FirebaseDatabase.getInstance();
@@ -65,27 +73,76 @@ public class DashboardFragment extends Fragment{
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        return root;
+    }
 
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        dd = root.findViewById(R.id.DisplayDate);
+        dd = view.findViewById(R.id.DisplayDate);
         dd.setText(formateInsance.format(currentDate.getTime()));
 
-        forward  = root.findViewById(R.id.action_bar_forward);
+        forward  = view.findViewById(R.id.action_bar_forward);
         forward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentDate.add(Calendar.MONTH, 1);
-                dd.setText(formateInsance.format(currentDate.getTime()));
+
+                switch (selectedDateRange){
+                    case "Daily": {
+                        currentDate.add(Calendar.DAY_OF_MONTH, 1);
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                    case "Weekly": {
+                        currentDate.add(Calendar.WEEK_OF_MONTH, 1);
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                    case "Monthly":{
+                        currentDate.add(Calendar.MONTH, 1);
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                    case "Yearly":{
+                        currentDate.add(Calendar.YEAR, 1);
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                }
+
             }
         });
 
-        backward  = root.findViewById(R.id.action_bar_back);
+        backward  = view.findViewById(R.id.action_bar_back);
         backward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentDate.add(Calendar.MONTH, -1);
-                dd.setText(formateInsance.format(currentDate.getTime()));
+                switch (selectedDateRange){
+                    case "Daily": {
+                        currentDate.add(Calendar.DAY_OF_MONTH, -1);
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                    case "Weekly": {
+                        currentDate.add(Calendar.WEEK_OF_MONTH, -1);
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                    case "Monthly":{
+                        currentDate.add(Calendar.MONTH, -1);
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                    case "Yearly":{
+                        currentDate.add(Calendar.YEAR, -1);
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                }
+
+
             }
         });
 
@@ -101,10 +158,57 @@ public class DashboardFragment extends Fragment{
         getAllTransactions();
 
 
-        return root;
+
+
+
+
+        spinnerdates = view.findViewById(R.id.spinnerDateSelection);
+
+        String[] dateselect = getResources().getStringArray(R.array.DatesSelection);
+        ArrayAdapter<String> dateselectionAdapter = new ArrayAdapter<String>(requireContext(),
+                androidx.transition.R.layout.support_simple_spinner_dropdown_item,
+                dateselect);
+        dateselectionAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        spinnerdates.setAdapter(dateselectionAdapter);
+
+
+        spinnerdates.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedDateRange = adapterView.getSelectedItem().toString();
+                switch (selectedDateRange){
+                    case "Daily": {
+                        formateInsance= new SimpleDateFormat("dd, MMMM");
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+
+                    case "Weekly": {
+                        formateInsance= new SimpleDateFormat("W, MMMM");
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                    case "Monthly":{
+                        formateInsance= new SimpleDateFormat("MMMM, YYYY");
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+                    case "Yearly":{
+                        formateInsance= new SimpleDateFormat("YYYY");
+                        dd.setText(formateInsance.format(currentDate.getTime()));
+                        break;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
     }
-
-
 
     @Override
     public void onDestroyView() {

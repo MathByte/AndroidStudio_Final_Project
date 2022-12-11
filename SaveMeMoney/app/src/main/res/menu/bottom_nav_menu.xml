@@ -12,9 +12,9 @@
         android:title="@string/title_dashboard" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_chart"
         android:icon="@drawable/ic_baseline_analytics_24"
-        android:title="@string/title_notifications" />
+        android:title="@string/title_chart" />
 
     <item
         android:id="@+id/navigation_login"

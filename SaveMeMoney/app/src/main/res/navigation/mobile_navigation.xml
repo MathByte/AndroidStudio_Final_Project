@@ -18,9 +18,9 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_chart"
         android:name="com.kh_kerbabian.savememoney.ui.charts.ChartsFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_chart"
         tools:layout="@layout/fragment_charts" />
 
     <fragment

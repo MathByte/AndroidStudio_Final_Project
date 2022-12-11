@@ -6,17 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.charts.ChartsFragment">
 
-    <TextView
-        android:id="@+id/text_notifications"
+
+
+
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/date_selection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_weight="1"
+        />
+
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barchart"
+        android:layout_width="331dp"
+        android:layout_height="256dp"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:layout_editor_absoluteX="40dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

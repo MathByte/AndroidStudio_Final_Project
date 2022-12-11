@@ -10,7 +10,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven{url 'https://jitpack.io'}
     }
 }
 rootProject.name = "SaveMeMoney"
-include ':app'
+
+
+include ':app'//, ':MPChartLib'
+
+//project(':MPChartLib').projectDir = new File('MPChartLib')
