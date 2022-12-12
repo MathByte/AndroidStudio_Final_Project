@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kh_kerbabian.savememoney.DataMinipulationFirebase;
 import com.kh_kerbabian.savememoney.R;
 import com.kh_kerbabian.savememoney.databinding.FragmentHomeBinding;
 
@@ -34,6 +35,7 @@ public class HomeFragment extends Fragment {
     private SimpleDateFormat formateInsance;
 
     private String currentTmedate;
+    private String currentTransaction = "Expenses";
 
     private FragmentHomeBinding binding;
 
@@ -112,7 +114,8 @@ public class HomeFragment extends Fragment {
                 binding.fabIncome.hide();
                 binding.fabExpence.hide();
                 binding.spinnerCategory.setEnabled(true);
-                binding.textViewEI.setText("Expenses");
+                currentTransaction = "Expenses";
+                binding.textViewEI.setText(currentTransaction);
             }
         });
 
@@ -126,7 +129,9 @@ public class HomeFragment extends Fragment {
                 binding.fabExpence.hide();
                 binding.spinnerCategory.setEnabled(false);
 
-                binding.textViewEI.setText("Income");
+
+                currentTransaction = "Income";
+                binding.textViewEI.setText(currentTransaction);
 
             }
         });
@@ -136,9 +141,9 @@ public class HomeFragment extends Fragment {
         binding.ButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                binding.idPBLoading.setVisibility(View.VISIBLE);
-
-                if(mAuth.getCurrentUser() != null) {
+                binding.idPBLoadinghomedashboard.setVisibility(View.VISIBLE);
+                if(DataMinipulationFirebase.getCurrentUser() != null)
+                {
                     currentTmedate = formateInsance.format(new Date()).toString();
 
 
@@ -147,8 +152,8 @@ public class HomeFragment extends Fragment {
                         && !binding.editTextNumber.getText().toString().isEmpty()
                     )
                     {
-                        String ref = mAuth.getCurrentUser().getUid().toString();
-                        databaseRef = database.getReference(ref);
+                       /// String ref = DataMinipulationFirebase.getCurrentUser().getUid().toString();
+                       /// DataMinipulationFirebase.setDatabaseRef(DataMinipulationFirebase.getDatabase().getReference(ref));
 
 
                         MoneyDataModel moneydata = new MoneyDataModel(
@@ -156,35 +161,39 @@ public class HomeFragment extends Fragment {
                                 binding.spinnerAccount.getSelectedItem().toString(),
                                 binding.editTextNumber.getText().toString(),
                                 currentTmedate,
-                                binding.textViewEI.getText().toString());
+                                currentTransaction);
 
-                        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        DataMinipulationFirebase.getDatabaseRef().addListenerForSingleValueEvent(new ValueEventListener() {
 
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                databaseRef
+                                DataMinipulationFirebase.getDatabaseRef()
                                         .child("Transactions")
                                         .child(moneydata.getDate())
                                         .setValue(moneydata);
                                 Toast.makeText(requireContext(), "Done", Toast.LENGTH_SHORT).show();
+                                binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
+                                DataMinipulationFirebase.NewEntery = true;
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                                 Toast.makeText(requireContext(), "Cant add data", Toast.LENGTH_SHORT).show();
+                                binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
+
                             }
                         });
                     }
                     else
 
                     {
-                        binding.idPBLoading.setVisibility(View.INVISIBLE);
-                        Toast.makeText(requireContext(), "Must not be empty", Toast.LENGTH_SHORT).show();
+                        binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
+                        Toast.makeText(requireContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
                 {
-                    binding.idPBLoading.setVisibility(View.INVISIBLE);
+                    binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
                     Toast.makeText(requireContext(), "Must be logged in", Toast.LENGTH_SHORT).show();
                 }
             }

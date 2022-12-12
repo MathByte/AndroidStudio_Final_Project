@@ -2,6 +2,7 @@ package com.kh_kerbabian.savememoney.ui.dashboard;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.kh_kerbabian.savememoney.R;
 import com.kh_kerbabian.savememoney.ui.home.MoneyDataModel;
 
@@ -47,7 +50,7 @@ public class RowItemsAdapter extends RecyclerView.Adapter<RowItemsAdapter.ViewHo
 
     }
 
-    @SuppressLint("ResourceAsColor")
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MoneyDataModel mdModle = rowModelArraylist.get(position);
@@ -57,7 +60,11 @@ public class RowItemsAdapter extends RecyclerView.Adapter<RowItemsAdapter.ViewHo
         holder.dateText.setText(mdModle.getDate());
         holder.typeText.setText(mdModle.getType());
         if(mdModle.getType().equals("Expenses"))
-            holder.consLayout.setBackgroundColor(R.color.light_red_shade_1);
+            holder.consLayout.setCardBackgroundColor(Color.RED);
+        else {
+            holder.consLayout.setCardBackgroundColor(Color.LTGRAY);
+
+        }
 
         setAnimation(holder.itemView, position);
     }
@@ -90,7 +97,7 @@ public class RowItemsAdapter extends RecyclerView.Adapter<RowItemsAdapter.ViewHo
         private TextView accountText;
         private TextView ammountText;
         private TextView typeText;
-        private ConstraintLayout consLayout;
+        private MaterialCardView consLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,7 +106,7 @@ public class RowItemsAdapter extends RecyclerView.Adapter<RowItemsAdapter.ViewHo
             accountText = itemView.findViewById(R.id.accountText);
             ammountText = itemView.findViewById(R.id.ammountText);
             typeText = itemView.findViewById(R.id.typeText);
-            consLayout = itemView.findViewById(R.id.cardHolderid);
+            consLayout = itemView.findViewById(R.id.cardid);
         }
         @Override
         public void onClick(View view) {

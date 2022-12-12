@@ -20,6 +20,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.kh_kerbabian.savememoney.DataMinipulationFirebase;
 import com.kh_kerbabian.savememoney.R;
 import com.kh_kerbabian.savememoney.databinding.FragmentChartsBinding;
 import com.kh_kerbabian.savememoney.databinding.FragmentLoginBinding;
@@ -27,7 +30,6 @@ import com.kh_kerbabian.savememoney.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment {
 
-    private FirebaseAuth mAuth;
 
     private FragmentLoginBinding binding;
 
@@ -43,7 +45,8 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
+       // mAuth = FirebaseAuth.getInstance();
+       // database =  FirebaseDatabase.getInstance();
 
     }
 
@@ -59,15 +62,25 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if(DataMinipulationFirebase.getCurrentUser() == null){
+
+
         binding.butLogOut.setEnabled(false);
         binding.butLogin.setEnabled(true);
         binding.buttonAnonymous.setEnabled(true);
         binding.butCreateAcc.setEnabled(true);
+        }
+        else{
+            binding.butLogOut.setEnabled(true);
+            binding.butLogin.setEnabled(false);
+            binding.buttonAnonymous.setEnabled(false);
+            binding.butCreateAcc.setEnabled(false);
+        }
 
         binding.buttonAnonymous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.signInAnonymously()
+                DataMinipulationFirebase.getmAuth().signInAnonymously()
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -75,8 +88,9 @@ public class LoginFragment extends Fragment {
 
                                     Toast.makeText(requireContext(), "Anonymously Authentication is Successful.",
                                             Toast.LENGTH_SHORT).show();
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    updateUI(user);
+
+                                    updateUI(DataMinipulationFirebase.getmAuth().getCurrentUser());
+
                                     binding.butLogOut.setEnabled(true);
                                     binding.butLogin.setEnabled(false);
                                     binding.buttonAnonymous.setEnabled(false);
@@ -87,7 +101,7 @@ public class LoginFragment extends Fragment {
 
                                     Toast.makeText(requireContext(), "Anonymously Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
+
                                 }
                             }
                         });
@@ -97,13 +111,18 @@ public class LoginFragment extends Fragment {
         binding.butCreateAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.createUserWithEmailAndPassword(binding.UserNameText.getText().toString(),binding.UserPasswordText.getText().toString())
+                DataMinipulationFirebase.getmAuth().createUserWithEmailAndPassword(binding.UserNameText.getText().toString(),binding.UserPasswordText.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    Toast.makeText(requireContext(), "Registration is Complete", Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(requireContext(), "Sign in is Complete", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), "Registration n Sign in is Complete", Toast.LENGTH_SHORT).show();
+
+
+
+                                    updateUI(DataMinipulationFirebase.getmAuth().getCurrentUser());
+
+
                                     binding.butLogOut.setEnabled(true);
                                     binding.butLogin.setEnabled(false);
                                     binding.buttonAnonymous.setEnabled(false);
@@ -122,12 +141,18 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                mAuth.signInWithEmailAndPassword(binding.UserNameText.getText().toString(),binding.UserPasswordText.getText().toString())
+                DataMinipulationFirebase.getmAuth().signInWithEmailAndPassword(binding.UserNameText.getText().toString(),binding.UserPasswordText.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
                                     Toast.makeText(requireContext(), "Login is Complete", Toast.LENGTH_SHORT).show();
+
+
+                                    updateUI(DataMinipulationFirebase.getmAuth().getCurrentUser());
+
+
+
                                     binding.butLogOut.setEnabled(true);
                                     binding.butLogin.setEnabled(false);
                                     binding.buttonAnonymous.setEnabled(false);
@@ -146,9 +171,16 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                mAuth.signOut();
-                if(mAuth.getCurrentUser() == null){
+                DataMinipulationFirebase.getmAuth().signOut();
+                if(DataMinipulationFirebase.getmAuth().getCurrentUser() == null){
                     Toast.makeText(requireContext(), "Sign out is Complete", Toast.LENGTH_SHORT).show();
+
+
+
+                    DataMinipulationFirebase.setCurrentUser(null);
+                    DataMinipulationFirebase.setDatabaseRef(null);
+
+
                     binding.butLogOut.setEnabled(false);
                     binding.butLogin.setEnabled(true);
                     binding.buttonAnonymous.setEnabled(true);
@@ -165,5 +197,11 @@ public class LoginFragment extends Fragment {
     }
 
     private void updateUI(FirebaseUser user) {
+        DataMinipulationFirebase.setCurrentUser(user);
+        String ref = DataMinipulationFirebase.getCurrentUser().getUid().toString();
+        DataMinipulationFirebase.setDatabaseRef(DataMinipulationFirebase.getDatabase().getReference(ref));
+        DataMinipulationFirebase.NewEntery = true;
+
+
     }
 }
