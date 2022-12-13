@@ -32,7 +32,7 @@ import com.kh_kerbabian.savememoney.R;
 import com.kh_kerbabian.savememoney.databinding.FragmentDashboardBinding;
 import com.kh_kerbabian.savememoney.ui.home.MoneyDataModel;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -70,15 +70,8 @@ public class DashboardFragment extends Fragment{
             Toast.makeText(requireContext(), "Please Login!", Toast.LENGTH_SHORT).show();
         else
         {
+            rowItemAdapter.notifyDataSetChanged();
 
-            DataMinipulationFirebase.updateArray(new OnGetDataListener() {
-            @Override
-            public void onSuccess(ArrayList<MoneyDataModel> dataSnapshotValue) {
-
-                rowItemAdapter.notifyDataSetChanged();
-
-            }
-        });
             //rowItemAdapter.notifyDataSetChanged();
             binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
 

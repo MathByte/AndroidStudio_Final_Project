@@ -19,13 +19,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 public class DataMinipulationFirebase {
 
     public static ArrayList<MoneyDataModel> dataArray = new ArrayList<MoneyDataModel>();
 
-    public static boolean NewEntery = true;
+
 
     private static FirebaseUser currentUser;
 
@@ -67,6 +70,84 @@ public class DataMinipulationFirebase {
     }
 
 
+    public static Map<String, Float> getTotalExpenses_byCategory(Date sd, String type) throws ParseException {
+
+        Map<String, Float> dic = new HashMap<String, Float>();
+
+
+        Calendar calendarIndex = Calendar.getInstance();
+        Calendar calendarModel = Calendar.getInstance();
+        calendarIndex.setTime(sd);
+
+        for (MoneyDataModel m : dataArray)
+            if (m.getType().equals("Expenses") ){
+                calendarModel.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(m.getDate()));
+
+
+                if(type.equals("Daily")) {
+                    if (calendarIndex.get(Calendar.DAY_OF_MONTH) == calendarModel.get(Calendar.DAY_OF_MONTH))
+                        if(dic.containsKey(m.getCategory())){
+                            float re = dic.get(m.getCategory());
+                            re += (float)m.getAmmount();
+                            dic.put(m.getCategory(), re);
+                        }
+                    else
+                        {
+                            dic.put(m.getCategory(), (float)m.getAmmount());
+                        }
+
+                }
+
+                else
+                if(type.equals("Weekly")){
+                    Calendar range = Calendar.getInstance();
+                    range.setTime(sd);
+                    range.add(Calendar.DATE, 7);
+
+                    if(calendarModel.after(calendarIndex) && calendarModel.before(range))
+                        if(dic.containsKey(m.getCategory())){
+                            float re = dic.get(m.getCategory());
+                            re += (float)m.getAmmount();
+                            dic.put(m.getCategory(), re);
+                        }
+                        else
+                        {
+                            dic.put(m.getCategory(), (float)m.getAmmount());
+                        }
+
+
+
+                }
+                else
+                if(type.equals("Monthly")){
+                    Calendar range = Calendar.getInstance();
+                    range.setTime(sd);
+                    range.add(Calendar.MONTH, 1);
+                    if(calendarModel.after(calendarIndex) && calendarModel.before(range))
+                        if(dic.containsKey(m.getCategory())){
+                            float re = dic.get(m.getCategory());
+                            re += (float)m.getAmmount();
+                            dic.put(m.getCategory(), re);
+                        }
+                        else
+                        {
+                            dic.put(m.getCategory(), (float)m.getAmmount());
+                        }
+
+
+                }
+
+
+
+            }
+
+        return dic;
+    }
+
+
+
+
+
 
     public static double getTotalExpenses(Date sd, String type) throws ParseException {
         double re = 0;
@@ -89,9 +170,7 @@ public class DataMinipulationFirebase {
                         Calendar range = Calendar.getInstance();
                         range.setTime(sd);
                         range.add(Calendar.DATE, 7);
-                        int lls = calendarIndex.get(Calendar.DAY_OF_MONTH);
-                        int llm = calendarModel.get(Calendar.DAY_OF_MONTH);
-                        int lle = range.get(Calendar.DAY_OF_MONTH);
+
                         if(calendarModel.after(calendarIndex) && calendarModel.before(range))
                             re += m.getAmmount();
 
@@ -165,12 +244,7 @@ public class DataMinipulationFirebase {
 
 
 
-    public static void updateArray(  OnGetDataListener listener){
-
-
-
-        if(NewEntery) {
-
+    public static void updateArray(  OnGetDataListener  listener){
 
             dataArray.clear();
 
@@ -192,8 +266,8 @@ public class DataMinipulationFirebase {
                             Log.d("childValue", child.getValue().toString());
                         }
 
-                        listener.onSuccess(dataArray);
-                        NewEntery = false;
+                        listener.onSuccess();
+
                     }
 
                     @Override
@@ -204,10 +278,7 @@ public class DataMinipulationFirebase {
 
 
             }
-        }
-        else{
-            listener.onSuccess(dataArray);
-        }
+
     }
 
 }

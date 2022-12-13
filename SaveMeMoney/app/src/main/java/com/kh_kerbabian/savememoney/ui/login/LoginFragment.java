@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kh_kerbabian.savememoney.DataMinipulationFirebase;
+import com.kh_kerbabian.savememoney.OnGetDataListener;
 import com.kh_kerbabian.savememoney.R;
 import com.kh_kerbabian.savememoney.databinding.FragmentChartsBinding;
 import com.kh_kerbabian.savememoney.databinding.FragmentLoginBinding;
@@ -80,29 +81,16 @@ public class LoginFragment extends Fragment {
         binding.buttonAnonymous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.idPBLoadinglogin.setVisibility(View.VISIBLE);
                 DataMinipulationFirebase.getmAuth().signInAnonymously()
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-
-                                    Toast.makeText(requireContext(), "Anonymously Authentication is Successful.",
-                                            Toast.LENGTH_SHORT).show();
-
+                                if (task.isSuccessful())
                                     updateUI(DataMinipulationFirebase.getmAuth().getCurrentUser());
-
-                                    binding.butLogOut.setEnabled(true);
-                                    binding.butLogin.setEnabled(false);
-                                    binding.buttonAnonymous.setEnabled(false);
-                                    binding.butCreateAcc.setEnabled(false);
-                                }
                                 else
-                                {
-
                                     Toast.makeText(requireContext(), "Anonymously Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
-
-                                }
                             }
                         });
             }
@@ -111,27 +99,16 @@ public class LoginFragment extends Fragment {
         binding.butCreateAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.idPBLoadinglogin.setVisibility(View.VISIBLE);
                 DataMinipulationFirebase.getmAuth().createUserWithEmailAndPassword(binding.UserNameText.getText().toString(),binding.UserPasswordText.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(requireContext(), "Registration n Sign in is Complete", Toast.LENGTH_SHORT).show();
-
-
-
+                                if(task.isSuccessful())
                                     updateUI(DataMinipulationFirebase.getmAuth().getCurrentUser());
-
-
-                                    binding.butLogOut.setEnabled(true);
-                                    binding.butLogin.setEnabled(false);
-                                    binding.buttonAnonymous.setEnabled(false);
-                                    binding.butCreateAcc.setEnabled(false);
-                                }
                                 else
-                                {
                                     Toast.makeText(requireContext(), "Registration failed.", Toast.LENGTH_SHORT).show();
-                                }
+
                             }
                         });
             }
@@ -140,28 +117,16 @@ public class LoginFragment extends Fragment {
         binding.butLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                binding.idPBLoadinglogin.setVisibility(View.VISIBLE);
                 DataMinipulationFirebase.getmAuth().signInWithEmailAndPassword(binding.UserNameText.getText().toString(),binding.UserPasswordText.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(requireContext(), "Login is Complete", Toast.LENGTH_SHORT).show();
-
-
+                                if(task.isSuccessful())
                                     updateUI(DataMinipulationFirebase.getmAuth().getCurrentUser());
-
-
-
-                                    binding.butLogOut.setEnabled(true);
-                                    binding.butLogin.setEnabled(false);
-                                    binding.buttonAnonymous.setEnabled(false);
-                                    binding.butCreateAcc.setEnabled(false);
-                                }
                                 else
-                                {
                                     Toast.makeText(requireContext(), "Login failed.", Toast.LENGTH_SHORT).show();
-                                }
+
                             }
                         });
             }
@@ -200,7 +165,19 @@ public class LoginFragment extends Fragment {
         DataMinipulationFirebase.setCurrentUser(user);
         String ref = DataMinipulationFirebase.getCurrentUser().getUid().toString();
         DataMinipulationFirebase.setDatabaseRef(DataMinipulationFirebase.getDatabase().getReference(ref));
-        DataMinipulationFirebase.NewEntery = true;
+
+        DataMinipulationFirebase.updateArray(new OnGetDataListener() {
+            @Override
+            public void onSuccess() {
+                binding.idPBLoadinglogin.setVisibility(View.INVISIBLE);
+                Toast.makeText(requireContext(), "Login is Complete", Toast.LENGTH_SHORT).show();
+                binding.butLogOut.setEnabled(true);
+                binding.butLogin.setEnabled(false);
+                binding.buttonAnonymous.setEnabled(false);
+                binding.butCreateAcc.setEnabled(false);
+
+            }
+        });
 
 
     }

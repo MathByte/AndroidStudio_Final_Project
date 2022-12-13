@@ -18,6 +18,7 @@
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:id="@+id/action_bar_back"
+            android:padding="10dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
@@ -27,16 +28,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:gravity="center_horizontal"
             android:padding="10dp"
             android:text="&quot;&quot;"
+            android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
 
         <ImageButton
             android:layout_marginRight="15dp"
             android:layout_width="wrap_content"
+            android:padding="10dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_forward"
             android:id="@+id/action_bar_forward"
@@ -50,7 +53,7 @@
             android:id="@+id/spinnerDateSelection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:padding="10dp"
             android:layout_weight="1" />
 
 

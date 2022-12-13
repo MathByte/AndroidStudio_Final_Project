@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kh_kerbabian.savememoney.DataMinipulationFirebase;
+import com.kh_kerbabian.savememoney.OnGetDataListener;
 import com.kh_kerbabian.savememoney.R;
 import com.kh_kerbabian.savememoney.databinding.FragmentHomeBinding;
 
@@ -75,17 +76,18 @@ public class HomeFragment extends Fragment {
 
         String[] accounts = getResources().getStringArray(R.array.AccountsStrings);
         ArrayAdapter<String> accountAdapter = new ArrayAdapter<String>(requireContext(),
-                androidx.transition.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_list,
                 accounts);
-        accountAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        accountAdapter.setDropDownViewResource(R.layout.spinner_list);
         binding.spinnerAccount.setAdapter(accountAdapter);
 
 
         String[] category = getResources().getStringArray(R.array.CategoryStrings);
         ArrayAdapter<String>categoryAdapter = new ArrayAdapter<String>(requireContext(),
-                androidx.transition.R.layout.support_simple_spinner_dropdown_item,
+                R.layout.spinner_list,
                 category);
-        categoryAdapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        categoryAdapter.setDropDownViewResource(R.layout.spinner_list);
+
         binding.spinnerCategory.setAdapter(categoryAdapter);
 
 
@@ -122,8 +124,8 @@ public class HomeFragment extends Fragment {
         binding.fabIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
 
                 binding.fabIncome.hide();
                 binding.fabExpence.hide();
@@ -171,9 +173,14 @@ public class HomeFragment extends Fragment {
                                         .child("Transactions")
                                         .child(moneydata.getDate())
                                         .setValue(moneydata);
-                                Toast.makeText(requireContext(), "Done", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), "Added", Toast.LENGTH_SHORT).show();
                                 binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
-                                DataMinipulationFirebase.NewEntery = true;
+                                DataMinipulationFirebase.updateArray(new OnGetDataListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
+                                    }
+                                });
                             }
 
                             @Override

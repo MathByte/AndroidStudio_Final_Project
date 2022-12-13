@@ -72,8 +72,9 @@
                     <Spinner
                         android:id="@+id/spinnerAccount"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
 
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:layout_weight="1" />
 
                 </LinearLayout>
@@ -96,6 +97,7 @@
                     <Spinner
                         android:id="@+id/spinnerCategory"
                         android:layout_width="match_parent"
+                        android:textColor="@color/white"
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
@@ -140,7 +142,8 @@
                     android:ems="10"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    android:hint="10.2"
+                    android:hint="10.2....0000"
+
                     android:inputType="number" />
 
 
