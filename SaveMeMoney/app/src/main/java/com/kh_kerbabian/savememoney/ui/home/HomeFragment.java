@@ -272,7 +272,7 @@ public class HomeFragment extends Fragment {
                                 Snackbar snackbar = Snackbar
                                         .make(view, "Can't add data!", Snackbar.LENGTH_LONG);
                                 snackbar.show();
-                             
+
                                 binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
 
                             }
