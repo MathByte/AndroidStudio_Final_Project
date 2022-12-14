@@ -1,5 +1,11 @@
 package com.kh_kerbabian.savememoney.ui.home;
 
+import static com.kh_kerbabian.savememoney.Notifications.Notifications.CHANNEL_1_ID;
+
+import android.app.Notification;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +17,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +45,8 @@ public class HomeFragment extends Fragment {
 
     private String currentTmedate;
     private String currentTransaction = "Expenses";
+    private NotificationManagerCompat notificationManager;
+
 
     private FragmentHomeBinding binding;
 
@@ -62,7 +72,7 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        notificationManager = NotificationManagerCompat.from(requireContext());
         return root;
     }
 
@@ -179,6 +189,39 @@ public class HomeFragment extends Fragment {
                                     @Override
                                     public void onSuccess() {
                                         binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
+
+
+                                        if(currentTransaction.equals("Expenses")) {
+                                            Notification notification = new NotificationCompat.Builder(requireContext(), CHANNEL_1_ID)
+
+                                                    .setContentTitle("Save Me Money")
+                                                    .setContentText(currentTransaction + " added successfully!")
+                                                        .setSmallIcon(R.drawable.ic_down_icon)
+                                                    .setColor(Color.RED)
+                                                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                                                    .build();
+
+                                            notificationManager.notify(1, notification);
+                                        }
+                                        else
+                                        {
+                                            Notification notification = new NotificationCompat.Builder(requireContext(), CHANNEL_1_ID)
+
+                                                    .setContentTitle("Save Me Money")
+                                                    .setContentText(currentTransaction + " added successfully!")
+                                                          .setSmallIcon(R.drawable.ic_up_icon)
+                                                    .setColor(Color.GREEN)
+
+                                                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                                                    .build();
+
+                                            notificationManager.notify(1, notification);
+                                        }
+
+
+
+
+
                                     }
                                 });
                             }

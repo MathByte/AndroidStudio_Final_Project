@@ -1,5 +1,8 @@
 package com.kh_kerbabian.savememoney.ui.login;
 
+import static com.kh_kerbabian.savememoney.Notifications.Notifications.CHANNEL_1_ID;
+
+import android.app.Notification;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
@@ -13,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,7 +38,7 @@ public class LoginFragment extends Fragment {
 
 
     private FragmentLoginBinding binding;
-
+    private NotificationManagerCompat notificationManager;
 
 
     public LoginFragment() {
@@ -56,6 +61,8 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        notificationManager = NotificationManagerCompat.from(requireContext());
         return root;
     }
 
@@ -141,6 +148,16 @@ public class LoginFragment extends Fragment {
                     Toast.makeText(requireContext(), "Sign out is Complete", Toast.LENGTH_SHORT).show();
 
 
+                    Notification notification = new NotificationCompat.Builder(requireContext(), CHANNEL_1_ID)
+                            .setSmallIcon(R.drawable.ic_money)
+                            .setContentTitle("Save Me Money")
+                            .setContentText("Logging out is complete!")
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .build();
+
+                    notificationManager.notify(1, notification);
+
+
 
                     DataMinipulationFirebase.setCurrentUser(null);
                     DataMinipulationFirebase.setDatabaseRef(null);
@@ -162,6 +179,23 @@ public class LoginFragment extends Fragment {
     }
 
     private void updateUI(FirebaseUser user) {
+
+
+
+        Notification notification = new NotificationCompat.Builder(requireContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_money)
+                .setContentTitle("Save Me Money")
+                .setContentText("Logging in is complete!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .build();
+
+        notificationManager.notify(1, notification);
+
+
+
+
+
+
         DataMinipulationFirebase.setCurrentUser(user);
         String ref = DataMinipulationFirebase.getCurrentUser().getUid().toString();
         DataMinipulationFirebase.setDatabaseRef(DataMinipulationFirebase.getDatabase().getReference(ref));

@@ -4,13 +4,20 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
+import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Notifications extends AppCompatActivity {
+public class Notifications extends Application {
     public static final String CHANNEL_1_ID = "channel1";
     public static final String CHANNEL_2_ID = "channel2";
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        createNotificationChannels();
+    }
 
     private void createNotificationChannels(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
