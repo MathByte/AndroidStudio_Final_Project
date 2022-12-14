@@ -204,7 +204,9 @@ public class HomeFragment extends Fragment {
                                         .child("Transactions")
                                         .child(moneydata.getDate())
                                         .setValue(moneydata);
-                                Toast.makeText(requireContext(), "Added", Toast.LENGTH_SHORT).show();
+                                Snackbar snackbar = Snackbar
+                                        .make(view, "Record has been added!", Snackbar.LENGTH_LONG);
+                                snackbar.show();
                                 binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
                                 DataMinipulationFirebase.updateArray(new OnGetDataListener() {
                                     @Override
@@ -267,7 +269,10 @@ public class HomeFragment extends Fragment {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(requireContext(), "Cant add data", Toast.LENGTH_SHORT).show();
+                                Snackbar snackbar = Snackbar
+                                        .make(view, "Can't add data!", Snackbar.LENGTH_LONG);
+                                snackbar.show();
+                             
                                 binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
 
                             }
