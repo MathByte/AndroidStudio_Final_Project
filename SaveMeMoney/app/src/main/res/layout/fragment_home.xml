@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_shade_2"
+
     tools:context=".ui.home.HomeFragment">
 
     <ScrollView
@@ -35,7 +35,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="20"
                     android:text="Expenses"
-                    android:textColor="@color/white"
+
                     android:textAlignment="center"
                     android:textSize="26dp" />
             </LinearLayout>
@@ -50,6 +50,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -64,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Account"
-                        android:textColor="@color/white"
+
                         android:textAlignment="center"
                         android:textSize="20sp" />
 
@@ -74,7 +75,7 @@
                         android:layout_width="match_parent"
 
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
+
                         android:layout_weight="1" />
 
                 </LinearLayout>
@@ -82,6 +83,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -90,14 +92,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Category"
-                        android:textColor="@color/white"
+
                         android:textAlignment="center"
                         android:textSize="20sp" />
 
                     <Spinner
                         android:id="@+id/spinnerCategory"
                         android:layout_width="match_parent"
-                        android:textColor="@color/white"
+
                         android:layout_height="wrap_content" />
 
                 </LinearLayout>
@@ -114,17 +116,19 @@
                 android:id="@+id/edittextViewComments"
                 android:layout_width="match_parent"
                 android:layout_height="127dp"
+                android:layout_marginTop="20dp"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="Add a note"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+
+
                 android:inputType="textMultiLine" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -132,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Amount:"
-                    android:textColor="@color/white"
+
                     android:textSize="20dp" />
 
                 <EditText
@@ -140,9 +144,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:hint="10.2....0000"
+
+
+                    android:hint="999,999.99"
 
                     android:inputType="number" />
 
@@ -154,8 +158,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/button_back"
-                android:textColor="@color/white"
+
                 android:text="Submit" />
         </LinearLayout>
     </ScrollView>

@@ -33,8 +33,9 @@
             android:padding="10dp"
             android:text="&quot;&quot;"
             android:textAlignment="center"
+            android:textAllCaps="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold" />
+            android:textStyle="bold|italic" />
 
         <ImageButton
             android:layout_marginRight="15dp"

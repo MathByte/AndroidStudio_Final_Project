@@ -3,10 +3,15 @@ package com.kh_kerbabian.savememoney.ui.home;
 import static com.kh_kerbabian.savememoney.Notifications.Notifications.CHANNEL_1_ID;
 
 import android.app.Notification;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +22,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +54,19 @@ public class HomeFragment extends Fragment {
     private String currentTmedate;
     private String currentTransaction = "Expenses";
     private NotificationManagerCompat notificationManager;
+
+
+
+    private SharedPreferences sharedPref;
+    String settingsDarkTheme = "xmlDarkTheme";
+    String settingsNotification = "xmlNotification";
+    String settingsVibration = "xmlVibration";
+
+
+
+
+
+
 
 
     private FragmentHomeBinding binding;
@@ -191,32 +212,50 @@ public class HomeFragment extends Fragment {
                                         binding.idPBLoadinghomedashboard.setVisibility(View.INVISIBLE);
 
 
-                                        if(currentTransaction.equals("Expenses")) {
-                                            Notification notification = new NotificationCompat.Builder(requireContext(), CHANNEL_1_ID)
+                                        if( sharedPref.getBoolean(settingsVibration, false)){
 
-                                                    .setContentTitle("Save Me Money")
-                                                    .setContentText(currentTransaction + " added successfully!")
-                                                        .setSmallIcon(R.drawable.ic_down_icon)
-                                                    .setColor(Color.RED)
-                                                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                                                    .build();
+                                            AppCompatActivity activity = (AppCompatActivity) getActivity();
 
-                                            notificationManager.notify(1, notification);
+                                            Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                                            } else {
+                                                //deprecated in API 26
+                                                v.vibrate(500);
+                                            }
                                         }
-                                        else
-                                        {
-                                            Notification notification = new NotificationCompat.Builder(requireContext(), CHANNEL_1_ID)
 
-                                                    .setContentTitle("Save Me Money")
-                                                    .setContentText(currentTransaction + " added successfully!")
-                                                          .setSmallIcon(R.drawable.ic_up_icon)
-                                                    .setColor(Color.GREEN)
 
-                                                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                                                    .build();
 
-                                            notificationManager.notify(1, notification);
-                                        }
+
+                                        if( sharedPref.getBoolean(settingsNotification, false))
+                                            if(currentTransaction.equals("Expenses")) {
+                                                Notification notification = new NotificationCompat.Builder(requireContext(), CHANNEL_1_ID)
+
+                                                        .setContentTitle("Save Me Money")
+                                                        .setContentText(currentTransaction + " added successfully!")
+                                                            .setSmallIcon(R.drawable.ic_down_icon)
+                                                        .setColor(Color.RED)
+                                                        .setPriority(NotificationCompat.PRIORITY_LOW)
+                                                        .build();
+
+                                                notificationManager.notify(1, notification);
+                                            }
+                                            else
+                                            {
+                                                Notification notification = new NotificationCompat.Builder(requireContext(), CHANNEL_1_ID)
+
+                                                        .setContentTitle("Save Me Money")
+                                                        .setContentText(currentTransaction + " added successfully!")
+                                                              .setSmallIcon(R.drawable.ic_up_icon)
+                                                        .setColor(Color.GREEN)
+
+                                                        .setPriority(NotificationCompat.PRIORITY_LOW)
+                                                        .build();
+
+                                                notificationManager.notify(1, notification);
+                                            }
 
 
 
@@ -256,4 +295,21 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext().getApplicationContext());
+        int[] values = new int[2];
+        values[0] = sharedPref.getBoolean(settingsDarkTheme, false) == true ? 1 : 0;
+        values[1] = sharedPref.getBoolean(settingsNotification, false) == true ? 1 : 0;
+        if( sharedPref.getBoolean(settingsDarkTheme, false))
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+
+
+    }
+
 }

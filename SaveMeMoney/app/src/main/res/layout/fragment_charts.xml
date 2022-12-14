@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.charts.ChartsFragment"
     android:orientation="vertical"
-    android:background="@color/black_shade_2">
+   >
 
 
     <include
